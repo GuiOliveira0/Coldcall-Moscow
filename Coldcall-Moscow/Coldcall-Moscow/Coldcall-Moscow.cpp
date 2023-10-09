@@ -31,9 +31,14 @@ int main() {
     al_register_event_source(event_queue, al_get_mouse_event_source());
     al_start_timer(timer);
 
-    int posX = 0, posY = 0;
-    int mouseX = 0, mouseY = 0;
+    float posX = 0, posY = 0;
+    float mouseX = 0, mouseY = 0;
     float rad = 0.00;
+
+    float hip = sqrt(pow(mouseX, 2) + pow(mouseY, 2));
+    float ang = mouseX / hip;
+
+    rad = ang * (3.1415 / 180);
 
     while (true) {
         ALLEGRO_EVENT event;
@@ -50,7 +55,9 @@ int main() {
         posY = sin(mouseY);
 
 
-        printf("%d", rad);
+        
+
+        printf("MouseX:%f MouseY:%f", mouseX,mouseY);
 
         //al_draw_bitmap(persona, 310,230,0);
         al_draw_filled_rectangle(mouseX - 1, mouseY - 2, mouseX + 2, mouseY - 15, al_map_rgb(255, 0, 0)); //Miras Verticais
@@ -61,7 +68,7 @@ int main() {
 
         al_draw_rotated_bitmap(persona, 10, 10, 310, 230, rad, 0);
 
-        rad += 0.01;
+        rad = mouseY/mouseX;
 
         al_flip_display();
         al_clear_to_color(al_map_rgb(255, 255, 255));
