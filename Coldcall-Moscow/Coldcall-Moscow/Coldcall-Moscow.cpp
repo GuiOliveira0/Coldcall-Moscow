@@ -39,43 +39,48 @@ int main() {
         }
 
         if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
-            if (event.keyboard.keycode == ALLEGRO_KEY_D) {
-                keyDPressed = true; 
-            }
-            if (event.keyboard.keycode == ALLEGRO_KEY_A) {
-                keyAPressed = true; 
-            }
-            if (event.keyboard.keycode == ALLEGRO_KEY_W) {
-                keyWPressed = true; 
-            }
-            if (event.keyboard.keycode == ALLEGRO_KEY_S) {
-                keySPressed = true; 
+            switch (event.keyboard.keycode) {
+                case ALLEGRO_KEY_D:
+                    keyDPressed = true;
+                    break;
+                case ALLEGRO_KEY_A:
+                    keyAPressed = true;
+                    break;
+                case ALLEGRO_KEY_W:
+                    keyWPressed = true;
+                    break;
+                case ALLEGRO_KEY_S:
+                    keySPressed = true;
+                    break;
+                default:
+                    break;
             }
         } else if (event.type == ALLEGRO_EVENT_KEY_UP) {
-            if (event.keyboard.keycode == ALLEGRO_KEY_D) {
-                keyDPressed = false; 
-            }
-            if (event.keyboard.keycode == ALLEGRO_KEY_A) {
-                keyAPressed = false; 
-            }
-            if (event.keyboard.keycode == ALLEGRO_KEY_W) {
-                keyWPressed = false; 
-            }
-            if (event.keyboard.keycode == ALLEGRO_KEY_S) {
-                keySPressed = false; 
+            switch (event.keyboard.keycode) {
+                case ALLEGRO_KEY_D:
+                    keyDPressed = false;
+                    break;
+                case ALLEGRO_KEY_A:
+                    keyAPressed = false;
+                    break;
+                case ALLEGRO_KEY_W:
+                    keyWPressed = false;
+                    break;
+                case ALLEGRO_KEY_S:
+                    keySPressed = false;
+                    break;
+                default:
+                    break;
             }
         }
 
         if (keyDPressed && !keyAPressed && !keyWPressed && !keySPressed) {
             posicaoX += velocidade;
-        }
-        if (keyAPressed && !keyDPressed && !keyWPressed && !keySPressed) {
+        }else if (keyAPressed && !keyDPressed && !keyWPressed && !keySPressed) {
             posicaoX -= velocidade;
-        }
-        if (keyWPressed && !keyAPressed && !keyDPressed && !keySPressed) {
+        }else if (keyWPressed && !keyAPressed && !keyDPressed && !keySPressed) {
             posicaoY -= velocidade;
-        }
-        if (keySPressed && !keyAPressed && !keyDPressed && !keyWPressed) {
+        }else if (keySPressed && !keyAPressed && !keyDPressed && !keyWPressed) {
             posicaoY += velocidade;
         }
 
@@ -85,29 +90,25 @@ int main() {
             double normaY = posicaoY / normalizacao;
             posicaoX += normaX * velocidade;
             posicaoY += normaY * velocidade;
-        }
-        if (keyDPressed && keyWPressed && !keyAPressed && !keySPressed) {
+        }else if (keyDPressed && keyWPressed && !keyAPressed && !keySPressed) {
             double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
             double normaX = posicaoX / normalizacao;
             double normaY = posicaoY / normalizacao;
             posicaoX += normaX * velocidade;
             posicaoY -= normaY * velocidade;
-        }
-        if (keyAPressed && keyWPressed && !keyDPressed && !keySPressed) {
+        }else if (keyAPressed && keyWPressed && !keyDPressed && !keySPressed) {
             double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
             double normaX = posicaoX / normalizacao;
             double normaY = posicaoY / normalizacao;
             posicaoX -= normaX * velocidade;
             posicaoY -= normaY * velocidade;
-        }
-        if (keyAPressed && keySPressed && !keyDPressed && !keyWPressed) {
+        }else if (keyAPressed && keySPressed && !keyDPressed && !keyWPressed) {
             double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
             double normaX = posicaoX / normalizacao;
             double normaY = posicaoY / normalizacao;
             posicaoX -= normaX * velocidade;
             posicaoY += normaY * velocidade;
         }
-        
         
         if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
             mouseX = event.mouse.x;
@@ -116,7 +117,14 @@ int main() {
 
         al_clear_to_color(al_map_rgb(255, 255, 255));
 
-        al_draw_filled_rectangle(0 + pos_x, 0 + pos_y, 20 + pos_x, 20 + pos_y, al_map_rgb(255, 0, 0));
+        al_draw_filled_rectangle(mouseX - 1, mouseY - 2, mouseX + 2, mouseY - 15, al_map_rgb(255, 0, 0)); //Miras Verticais
+        al_draw_filled_rectangle(mouseX - 1, mouseY + 2, mouseX + 2, mouseY + 15, al_map_rgb(255, 0, 0));
+
+        al_draw_filled_rectangle(mouseX + 2, mouseY - 1, mouseX + 15, mouseY + 2, al_map_rgb(255, 0, 0)); //Miras Horizontais
+        al_draw_filled_rectangle(mouseX - 2, mouseY - 1, mouseX - 15, mouseY + 2, al_map_rgb(255, 0, 0));
+
+        al_draw_filled_rectangle(0 + posicaoX, 0 + posicaoY, 20 + posicaoX, 20 + posicaoY, al_map_rgb(255, 0, 0));
+
         al_flip_display();
         al_clear_to_color(al_map_rgb(255, 255, 255));
     }
