@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 
+
 int main() {
 
     al_init();
@@ -15,7 +16,7 @@ int main() {
     al_init_image_addon();
 
 
-    ALLEGRO_DISPLAY* display = al_create_display(640, 480);
+    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
     al_set_window_position(display, 200, 200);
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
@@ -33,12 +34,7 @@ int main() {
 
     float posX = 0, posY = 0;
     float mouseX = 0, mouseY = 0;
-    float rad = 0.00;
-
-    float hip = sqrt(pow(mouseX, 2) + pow(mouseY, 2));
-    float ang = mouseX / hip;
-
-    rad = ang * (3.1415 / 180);
+    float ang = 0;
 
     while (true) {
         ALLEGRO_EVENT event;
@@ -50,23 +46,17 @@ int main() {
             mouseX = event.mouse.x;
             mouseY = event.mouse.y;
         }
-
-        posX = cos(mouseX);
-        posY = sin(mouseY);
-
-        printf("MouseX:%f MouseY:%f", mouseX, mouseY);
-
-        //al_draw_bitmap(persona, 310,230,0);
+        posX = mouseX - 640;
+        posY = -1 * (mouseY - 360);
+        ang = atan2(posX, posY);
+  
         al_draw_filled_rectangle(mouseX - 1, mouseY - 2, mouseX + 2, mouseY - 15, al_map_rgb(255, 0, 0)); //Miras Verticais
         al_draw_filled_rectangle(mouseX - 1, mouseY + 2, mouseX + 2, mouseY + 15, al_map_rgb(255, 0, 0));
 
         al_draw_filled_rectangle(mouseX + 2, mouseY - 1, mouseX + 15, mouseY + 2, al_map_rgb(255, 0, 0)); //Miras Horizontais
         al_draw_filled_rectangle(mouseX - 2, mouseY - 1, mouseX - 15, mouseY + 2, al_map_rgb(255, 0, 0));
 
-        al_draw_rotated_bitmap(persona, 10, 10, 310, 230, rad, 0);
-
-        rad = mouseY / mouseX;
-
+        al_draw_rotated_bitmap(persona, 10, 10, 640, 360, ang, 0);
         al_flip_display();
         al_clear_to_color(al_map_rgb(255, 255, 255));
     }
