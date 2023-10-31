@@ -4,6 +4,7 @@
 #include <allegro5/mouse_cursor.h>
 #include <allegro5/allegro_image.h>
 #include <iostream>
+#include <math.h>
 
 int main() {
     al_init();
@@ -29,11 +30,13 @@ int main() {
     al_register_event_source(event_queue, al_get_mouse_event_source());
     al_start_timer(timer);
 
-    int posicaoX = 300, posicaoY = 300;
-    int mouseX = 0, mouseY = 0;
+    float posicaoPersonagemX = 300, posicaoPersonagemY = 300;
+    float posicaoMouseX = 0, posicaoMouseY = 0;
+    float mouseX = 0, mouseY = 0;
 
     int keyDPressed = false, keyAPressed = false, keyWPressed = false, keySPressed = false;
     int velocidade = 3;
+    float ang = 0;
 
     int cameraX = 0, cameraY = 0;
 
@@ -82,45 +85,45 @@ int main() {
         }
 
         if (keyDPressed && keySPressed && !keyAPressed && !keyWPressed) {
-            double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
-            double normaX = posicaoX / normalizacao;
-            double normaY = posicaoY / normalizacao;
-            posicaoX += normaX * velocidade;
-            posicaoY += normaY * velocidade;
+            double normalizacao = sqrt(posicaoPersonagemX * posicaoPersonagemX + posicaoPersonagemY * posicaoPersonagemY);
+            double normaX = posicaoPersonagemX / normalizacao;
+            double normaY = posicaoPersonagemY / normalizacao;
+            posicaoPersonagemX += normaX * velocidade;
+            posicaoPersonagemY += normaY * velocidade;
         }
         else if (keyDPressed && keyWPressed && !keyAPressed && !keySPressed) {
-            double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
-            double normaX = posicaoX / normalizacao;
-            double normaY = posicaoY / normalizacao;
-            posicaoX += normaX * velocidade;
-            posicaoY -= normaY * velocidade;
+            double normalizacao = sqrt(posicaoPersonagemX * posicaoPersonagemX + posicaoPersonagemY * posicaoPersonagemY);
+            double normaX = posicaoPersonagemX / normalizacao;
+            double normaY = posicaoPersonagemY / normalizacao;
+            posicaoPersonagemX += normaX * velocidade;
+            posicaoPersonagemY -= normaY * velocidade;
         }
         else if (keyAPressed && keyWPressed && !keyDPressed && !keySPressed) {
-            double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
-            double normaX = posicaoX / normalizacao;
-            double normaY = posicaoY / normalizacao;
-            posicaoX -= normaX * velocidade;
-            posicaoY -= normaY * velocidade;
+            double normalizacao = sqrt(posicaoPersonagemX * posicaoPersonagemX + posicaoPersonagemY * posicaoPersonagemY);
+            double normaX = posicaoPersonagemX / normalizacao;
+            double normaY = posicaoPersonagemY / normalizacao;
+            posicaoPersonagemX -= normaX * velocidade;
+            posicaoPersonagemY -= normaY * velocidade;
         }
         else if (keyAPressed && keySPressed && !keyDPressed && !keyWPressed) {
-            double normalizacao = sqrt(posicaoX * posicaoX + posicaoY * posicaoY);
-            double normaX = posicaoX / normalizacao;
-            double normaY = posicaoY / normalizacao;
-            posicaoX -= normaX * velocidade;
-            posicaoY += normaY * velocidade;
+            double normalizacao = sqrt(posicaoPersonagemX * posicaoPersonagemX + posicaoPersonagemY * posicaoPersonagemY);
+            double normaX = posicaoPersonagemX / normalizacao;
+            double normaY = posicaoPersonagemY / normalizacao;
+            posicaoPersonagemX -= normaX * velocidade;
+            posicaoPersonagemY += normaY * velocidade;
         }
 
         if (keyDPressed && !keyAPressed && !keyWPressed && !keySPressed) {
-            posicaoX += velocidade;
+            posicaoPersonagemX += velocidade;
         }
         else if (keyAPressed && !keyDPressed && !keyWPressed && !keySPressed) {
-            posicaoX -= velocidade;
+            posicaoPersonagemX -= velocidade;
         }
         else if (keyWPressed && !keyAPressed && !keyDPressed && !keySPressed) {
-            posicaoY -= velocidade;
+            posicaoPersonagemY -= velocidade;
         }
         else if (keySPressed && !keyAPressed && !keyDPressed && !keyWPressed) {
-            posicaoY += velocidade;
+            posicaoPersonagemY += velocidade;
         }
 
         if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
@@ -129,21 +132,28 @@ int main() {
         }
 
         // Limites mapa
-        if (posicaoX < -2.5) {
-            posicaoX = -2.5;
+        if (posicaoPersonagemX < -2.5) {
+            posicaoPersonagemX = -2.5;
         }
-        if (posicaoY < -2.5) {
-            posicaoY = -2.5;
+        if (posicaoPersonagemY < -2.5) {
+            posicaoPersonagemY = -2.5;
         }
-        if (posicaoX > 1262.5) {
-            posicaoX = 1262.5;
+        if (posicaoPersonagemX > 1262.5) {
+            posicaoPersonagemX = 1262.5;
         }
-        if (posicaoY > 702.5) {
-            posicaoY = 702.5;
+        if (posicaoPersonagemY > 702.5) {
+            posicaoPersonagemY = 702.5;
         }
 
-        cameraX = posicaoX - al_get_display_width(display) / 2;
-        cameraY = posicaoY - al_get_display_height(display) / 2;
+        posicaoMouseX = mouseX - (al_get_display_width(display)) / 2;
+        posicaoMouseY = -1 * (mouseY - (al_get_display_height(display) / 2));
+        ang = atan2(posicaoMouseX, posicaoMouseY);
+        printf("PosicaoMouseX: %f\nPosicaoMouseY: %f", posicaoMouseX, posicaoMouseY);
+
+        al_hide_mouse_cursor(display);
+
+        cameraX = posicaoPersonagemX - al_get_display_width(display) / 2;
+        cameraY = posicaoPersonagemY - al_get_display_height(display) / 2;
 
         al_clear_to_color(al_map_rgb(255, 255, 255));
 
@@ -155,7 +165,8 @@ int main() {
         al_draw_filled_rectangle(mouseX + 2, mouseY - 1, mouseX + 15, mouseY + 2, al_map_rgb(255, 0, 0)); //Miras Horizontais
         al_draw_filled_rectangle(mouseX - 2, mouseY - 1, mouseX - 15, mouseY + 2, al_map_rgb(255, 0, 0));
 
-        al_draw_bitmap(personagem, posicaoX - cameraX, posicaoY - cameraY, 0);
+        //al_draw_bitmap(personagem, posicaoPersonagemX - cameraX, posicaoPersonagemY - cameraY, 0);
+        al_draw_rotated_bitmap(personagem, 10, 10, posicaoPersonagemX - cameraX, posicaoPersonagemY - cameraY, ang, 0);
         //al_draw_filled_rectangle(posicaoX - cameraX, posicaoY - cameraY, posicaoX + 20 - cameraX, posicaoY + 20 - cameraY, al_map_rgb(255, 0, 0));
 
         al_flip_display();
